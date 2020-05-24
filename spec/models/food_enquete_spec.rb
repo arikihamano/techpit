@@ -67,6 +67,64 @@ RSpec.describe FoodEnquete, type: :model do
   end
 
   describe 'アンケート回答時の条件' do
+    context 'メールアドレスを確認すること' do
+      it '同じメールアドレスで再び回答できないこと' do
+        enquete_tanaka = FoodEnquete.new(
+          name: '田中 太郎',
+          mail: 'taro.tanaka@example.com',
+          age: 25,
+          food_id: 2,
+          score: 3,
+          request: 'おいしかったです。',
+          present_id: 1,
+        )
+        enquete_tanaka.save
+
+        re_enquete_tanaka = FoodEnquete.new(
+          name: '田中 太郎',
+          mail: 'taro.tanaka@example.com',
+          age: 25,
+          food_id: 0,
+          score: 1,
+          request: 'スープがぬるかった',
+          present_id: 0
+        )
+        expect(re_enquete_tanaka).not_to be_valid
+
+        expect(re_enquete_tanaka.errors[:mail]).to include(I18n.t('errors.messages.taken'))
+        expect(re_enquete_tanaka.save).to be_falsey
+        expect(FoodEnquete.all.size).to eq 1
+      end
+
+      it '異なるメールアドレスで回答できないこと' do
+        enquete_tanaka = FoodEnquete.new(
+          name: '田中 太郎',
+          mail: 'taro.tanaka@example.com',
+          age: 25,
+          food_id: 2,
+          score: 3,
+          request: 'おいしかったです。',
+          present_id: 1
+        )
+        enquete_tanaka.save
+
+        enquete_yamada = FoodEnquete.new(
+          name: '山田 次郎',
+          mail: 'jiro.yamada@example.com',
+          age: 22,
+          food_id: 1,
+          score: 2,
+          request: '',
+          present_id: 0
+        )
+
+        expect(enquete_yamada).to be_valid
+        enquete_yamada.save
+
+        expect(FoodEnquete.all.size).to eq 2
+      end
+    end
+
     context '年齢を確認すること' do
       it '未成年はビール飲み放題を選択できないこと' do
         enquete_sato = FoodEnquete.new(
