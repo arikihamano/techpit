@@ -56,6 +56,17 @@ RSpec.describe FoodEnquete, type: :model do
       end
     end
 
+    describe 'メールアドレスの形式' do
+      context '不正な形式のメールアドレスの場合' do
+        it 'エラーになること' do
+          new_enquete = FoodEnquete.new
+          new_enquete.mail = "taro.tanaka"
+          expect(new_enquete).not_to be_valid
+          expect(new_enquete.errors[:mail]).to include(I18n.t('errors.messages.invalid'))
+        end
+      end
+    end
+
     context '任意入力であること' do
       it 'ご意見・要望が任意であること' do
         new_enquete = FoodEnquete.new
