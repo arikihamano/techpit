@@ -37,6 +37,12 @@ group :development, :test do
   
 end
 
+group :test do
+  gem 'capybara', '~> 3.28'
+  gem 'selenium-webdriver', '~> 3.142'
+  gem 'webdrivers', '~> 4.1'
+end
+
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
