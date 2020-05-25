@@ -29,7 +29,27 @@ RSpec.describe "FoodEnquetes", type: :system do
         expect(page).to have_content 'ご希望のプレゼント: 【10名に当たる】ビール飲み放題'
 
         sleep 5
-        
+
+      end
+    end
+  end
+
+  describe '異常' do
+    context "必須項目が未入力" do
+      it "エラーメッセージが表示され、回答できないこと" do
+        visit "/food_enquetes/new"
+
+        sleep 2
+
+        click_button '登録する'
+
+        expect(page).not_to have_content 'ご回答ありがとうございました'
+        expect(page).to have_content 'お名前を入力してください'
+        expect(page).to have_content 'メールアドレスを入力してください'
+        expect(page).to have_content '年齢を入力してください'
+        expect(page).to have_content '満足度を入力してください'
+
+        sleep 5
       end
     end
   end
