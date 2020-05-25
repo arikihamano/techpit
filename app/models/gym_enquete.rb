@@ -1,6 +1,7 @@
 class GymEnquete < ApplicationRecord
   include CommonModule # 「お食事」と「スポーツジム」モデルの共通モジュール
 
+
   # 参加したコース 必須入力 数値 整数のみ 0〜1 (0:脂肪燃焼 1:ヨガ)
   validates :course_id, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
 
